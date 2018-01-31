@@ -6,8 +6,6 @@ window.addEventListener("load", function(event) {
   const tailHeight = canHeight / 3.5 ;
   const tailPos = canHeight / 1.4;
 
-
-
   let hasInput = false;
   let imgUrl = " ";
   
@@ -45,18 +43,7 @@ window.addEventListener("load", function(event) {
       context.restore();
     }
 
-    function addInput(x, y) {
-      var input = document.createElement('input');
-      input.type = 'text';
-      input.style.position = 'fixed';
-      input.style.left = (x - 4) + 'px';
-      input.style.top = (y - 4) + 'px';
 
-      input.onkeydown = handleEnter;
-      document.body.appendChild(input);
-      input.focus();
-      hasInput = true;
-    }
 
     //Adding name to the board
     function drawName(string){
@@ -75,7 +62,7 @@ window.addEventListener("load", function(event) {
         //console.log(fontResize);
         let fontSize = writeHeight / fontResize;
 
-        console.log(fontSize);
+        //console.log(fontSize);
         context.font = "800 " + fontSize + "px Graduate" ;
        
         //console.log(context.font);
@@ -100,6 +87,7 @@ window.addEventListener("load", function(event) {
       }
 
       can.onclick = function(){
+        showEditor();
         if(hasInput) return;
         addInput(20,20);
 
@@ -108,12 +96,10 @@ window.addEventListener("load", function(event) {
       function addInput(x, y) {
         var input = document.createElement('input');
         input.type = 'text';
-        input.style.position = 'fixed';
-        input.style.left = (x - 4) + 'px';
-        input.style.top = (y - 4) + 'px';
+        input.placeholder = "your name here";
 
         input.onkeydown = handleEnter;
-        document.body.appendChild(input);
+        document.getElementById('middle').appendChild(input);
         input.focus();
         hasInput = true;
       }
@@ -126,16 +112,32 @@ window.addEventListener("load", function(event) {
             drawTail();
             drawName(this.value);
             drawSilhouette();
-            document.body.removeChild(this);
+            document.getElementById('middle').removeChild(this);
             hasInput = false;
+            showEditor();
         }
       }
     }
 
     drawBoard();
 
-    $("button#upload").click(function(e) {
+    function showEditor() {
+        var editor = document.getElementById("nameeditor");
+        if (editor.style.display === "none") {
+            editor.style.display = "block";
+        } else {
+            editor.style.display = "none";
+        }
+    }
 
+    $(document).keyup(function(e) {
+         if (e.keyCode == 27) { // escape key maps to keycode `27`
+            showEditor();
+        }
+    });
+
+
+    $("button#upload").click(function(e) {
         try {
             var img = can.toDataURL('image/jpeg', 1).split(',')[1];
 
@@ -154,22 +156,51 @@ window.addEventListener("load", function(event) {
           },
           dataType: 'json',
           success: function(response) {
-              if(response.success) {
-                  imgUrl = response.data.link;
-                  //window.location = response.data.link;
-                  //console.log("Success Image has been uploaded and can be found here " + imgUrl);
-                  const coverImage = imgUrl;
-                  const url = 'http://www.zazzle.com/api/create/at-238092028220728468?rf=238092028220728468&ax=Linkover&pd=186437621024529370&fwd=ProductPage&ed=true&boardgraphic=' + coverImage ;
-
-                  window.location = url;
-              }
+            if(response.success) {
+                imgUrl = response.data.link;
+                //window.location = response.data.link;
+                //console.log("Success Image has been uploaded and can be found here " + imgUrl);
+                const coverImage = imgUrl;
+                const url = 'http://www.zazzle.com/api/create/at-238092028220728468?rf=238092028220728468&ax=Linkover&pd=186437621024529370&fwd=ProductPage&ed=true&boardgraphic=' + coverImage ;
+                window.location = url;
+            }
           }
         });
+    });
 
+    function download_image(i){
+        // Dump the canvas contents to a file.
+        try {
+            var img = can.toDataURL('image/jpeg', 1).split(',')[1];
+
+        } catch(i) {
+            var img = can.toDataURL().split(',')[1];
+        }
+        i.preventDefault();
+        $.ajax({
+          url: 'https://api.imgur.com/3/image',
+          type: 'post',
+          headers: {
+              Authorization: 'Client-ID f1b5ccacd2f48b9'
+          },
+          data: {
+              image: img
+          },
+          dataType: 'json',
+          success: function(response) {
+            if(response.success) {
+                window.location = response.data.link;
+            }
+          }
+        });
+    }
+
+    $("button#download").click(function(){
+      //console.log('clicked download');
+      download_image();
     });
 
   }
-
   imgObj.src = 'http://muska-new.surge.sh/images/silhouette.png';
-
+  $('#wrapper').width($('#canvas1').width());
 });
