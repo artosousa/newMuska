@@ -1,63 +1,104 @@
-setTimeout(function(){ 
-      const inputBox = document.getElementById('name');
-      const can = document.getElementById('canvas1');
-      const ctx = can.getContext('2d');
+window.addEventListener("load", function(event) {
+  const can = document.getElementById('canvas1');
+  const ctx = can.getContext('2d');
+  const canWidth = ctx.canvas.width = window.innerHeight /4;
+  const canHeight =  ctx.canvas.height = window.innerHeight;
+  const tailHeight = canHeight / 3.5 ;
+  const tailPos = canHeight / 1.4;
 
-      const canWidth = ctx.canvas.width = window.innerHeight /4;
-      const canHeight =  ctx.canvas.height = window.innerHeight;
+  let hasInput = false;
+  let imgUrl = " ";
+  
+  imgObj = new Image();
+  imgObj.onload = function() {
 
-      const tailHeight = canHeight / 3.5 ;
-      const tailPos = canHeight / 1.4;
+    //piecing it all together
+    function drawBoard() {
+      drawWhiteBg();
+      drawName();
+      drawWhiteBg();
+      drawTail();
+      drawName();
+      drawSilhouette();
+    }
 
-      function drawBoard() {
-        drawWhiteBg();      
-        drawName();
-        drawSilhouette();
-        drawWhiteBg();
-        drawTail();
-        drawName();
+    //Add White Background to the graphic
+    function drawWhiteBg() {
+      const context = can.getContext('2d');
+      context.fillStyle = "white";
+      context.fillRect(0, 0, canWidth, canHeight);
+    }
+
+    //Drawing the red tail to the board
+    function drawTail() {
+      const context = can.getContext('2d');
+
+      context.fillStyle = "red";
+      context.fillRect(0, tailPos, canWidth, tailHeight);
+    }
+
+    //adding silhouette PNG to the board
+    function drawSilhouette(){
+      const context = can.getContext('2d');
+      context.drawImage(imgObj, 0, canHeight / 2.04, canWidth,canHeight / 3   );
+
+      context.save();
+      context.drawImage(imgObj, 0, canHeight / 2.04, canWidth,canHeight / 3   );
+      context.restore();
+    }
+
+    //Adding name to the board
+    function drawName(){
+      const context = can.getContext("2d");
+      let string = "MCKOY";
+      const formatString = string.split('');
+
+      let xAxis = canWidth / 1.35;
+      let yAxis = canHeight / 8;
+      const writeHeight = canHeight - tailHeight ;
+      let fontSize = writeHeight / 5;
+     
+      can.onclick = function(){
+        if(hasInput) return;
+        addInput(20,20);
+
       }
 
-      function drawWhiteBg() {
-        const context = can.getContext('2d');
+      function addInput(x, y) {
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.style.position = 'fixed';
+        input.style.left = (x - 4) + 'px';
+        input.style.top = (y - 4) + 'px';
 
-        context.fillStyle = "white";
-        context.fillRect(0, 0, canWidth, canHeight);
+        input.onkeydown = handleEnter;
+        document.body.appendChild(input);
+        input.focus();
+        hasInput = true;
       }
 
-      function drawTail() {
-        const context = can.getContext('2d');
-
-        context.fillStyle = "red";
-        context.fillRect(0, tailPos, canWidth, tailHeight);
-      }
-
-      function drawSilhouette(){
-        const context = can.getContext('2d');
-        const imageObj = new Image();
-
-        imageObj.onload = function() {
-          context.drawImage(imageObj, 0, canHeight / 2.04, canWidth,canHeight / 3   );
+      function handleEnter(e) {
+        var keyCode = e.keyCode;
+        if (keyCode === 13) {
+            ctx.clearRect(0, 0, canWidth, canHeight);
+            drawWhiteBg();
+            drawTail();
+            drawSilhouette();
+            drawText(this.value);
+            document.body.removeChild(this);
+            hasInput = false;
         }
-
-        imageObj.src = 'images/silhouette.png';
       }
 
-      function drawName(){
-       
-        const context = can.getContext("2d");
-        const string = "SOUSA";
-        const formatString = string.split('');
+      function drawText(txt) {
+        string = txt;
+        let newFormat = string.split('');
 
-        let x = canWidth / 1.35;
-        let y = canHeight / 8;
-
-        let fontSize = canHeight/8;
-
-        for (let i = 0; i < formatString.length; i++) {
+        for (let o = 0; o < newFormat.length; o++) {
+          context.textBaseline = 'top';
           context.font = "800 " + fontSize + "px Graduate" ;
           //console.log(context.font);
-        
+
           context.textAlign = "center";
           context.shadowColor="gray";
           context.shadowBlur=2;
@@ -65,17 +106,78 @@ setTimeout(function(){
           context.lineWidth=8;
 
           context.strokeStyle = "white";
-          context.strokeText(formatString[i], x, y);
+          context.strokeText(newFormat[o],  xAxis, 22);
           context.globalCompositeOperation = "destination-out";
 
-          ctx.globalCompositeOperation = "source-over"; 
+          ctx.globalCompositeOperation = "source-over";
           context.fillStyle = "gray";
-          context.fillText(formatString[i], x, y);
-          
-          y += fontSize;
-        }
-         
+          context.fillText(newFormat[o],  xAxis, 22);
+
+          fontSize = writeHeight / newFormat.length  ;
+        } 
       }
 
-      drawBoard();
-    }, 30);
+      for (let i = 0; i < formatString.length; i++) {
+        context.font = "800 " + fontSize + "px Graduate" ;
+
+        //console.log(context.font);
+        context.textAlign = "center";
+        context.shadowColor="gray";
+        context.shadowBlur=2;
+        context.lineJoin = "round";
+        context.lineWidth=8;
+
+        context.strokeStyle = "white";
+        context.strokeText(formatString[i], xAxis, yAxis);
+        context.globalCompositeOperation = "destination-out";
+
+        ctx.globalCompositeOperation = "source-over";
+        context.fillStyle = "gray";
+        context.fillText(formatString[i], xAxis, yAxis);
+        yAxis += fontSize;
+
+      }
+    }
+
+    drawBoard();
+
+
+    $("button#upload").click(function(e) {
+
+        try {
+            var img = can.toDataURL('image/jpeg', 1).split(',')[1];
+
+        } catch(e) {
+            var img = can.toDataURL().split(',')[1];
+        }
+        e.preventDefault();
+        $.ajax({
+          url: 'https://api.imgur.com/3/image',
+          type: 'post',
+          headers: {
+              Authorization: 'Client-ID f1b5ccacd2f48b9'
+          },
+          data: {
+              image: img
+          },
+          dataType: 'json',
+          success: function(response) {
+              if(response.success) {
+                  imgUrl = response.data.link;
+                  //window.location = response.data.link;
+                  console.log("Success Image has been uploaded and can be found here " + imgUrl);
+                  const coverImage = imgUrl;
+                  const url = 'http://www.zazzle.com/api/create/at-238092028220728468?rf=238092028220728468&ax=Linkover&pd=186437621024529370&fwd=ProductPage&ed=true&boardgraphic=' + coverImage ;
+
+                  window.location = url;
+              }
+          }
+        });
+
+    });
+
+  }
+
+  imgObj.src = 'http://muska-new.surge.sh/images/silhouette.png';
+
+});
