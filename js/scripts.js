@@ -6,6 +6,8 @@ window.addEventListener("load", function(event) {
   const tailHeight = canHeight / 3.5 ;
   const tailPos = canHeight / 1.4;
 
+
+
   let hasInput = false;
   let imgUrl = " ";
   
@@ -15,12 +17,11 @@ window.addEventListener("load", function(event) {
     //piecing it all together
     function drawBoard() {
       drawWhiteBg();
-      drawName();
-      drawWhiteBg();
       drawTail();
-      drawName();
+      drawName("MCKOY");
       drawSilhouette();
     }
+
     //Add White Background to the graphic
     function drawWhiteBg() {
       const context = can.getContext('2d');
@@ -44,20 +45,39 @@ window.addEventListener("load", function(event) {
       context.restore();
     }
 
+    function addInput(x, y) {
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.style.position = 'fixed';
+      input.style.left = (x - 4) + 'px';
+      input.style.top = (y - 4) + 'px';
+
+      input.onkeydown = handleEnter;
+      document.body.appendChild(input);
+      input.focus();
+      hasInput = true;
+    }
+
     //Adding name to the board
-    function drawName(){
+    function drawName(string){
       const context = can.getContext("2d");
-      let string = "MCKOY";
       const formatString = string.split('');
+      const writeHeight = canHeight - tailHeight ;
+      
+
 
       let xAxis = canWidth / 1.35;
       let yAxis = canHeight / 8;
-      const writeHeight = canHeight - tailHeight ;
-      let fontSize = writeHeight / 5;
 
       for (let i = 0; i < formatString.length; i++) {
-        context.font = "800 " + fontSize + "px Graduate" ;
+        
+        let fontResize = formatString.length + 1;
+        //console.log(fontResize);
+        let fontSize = writeHeight / fontResize;
 
+        console.log(fontSize);
+        context.font = "800 " + fontSize + "px Graduate" ;
+       
         //console.log(context.font);
         context.textAlign = "center";
         context.shadowColor="gray";
@@ -72,8 +92,43 @@ window.addEventListener("load", function(event) {
         ctx.globalCompositeOperation = "source-over";
         context.fillStyle = "gray";
         context.fillText(formatString[i], xAxis, yAxis);
+
         yAxis += fontSize;
 
+        //fontSize = writeHeight / formatString.length;
+
+      }
+
+      can.onclick = function(){
+        if(hasInput) return;
+        addInput(20,20);
+
+      }
+
+      function addInput(x, y) {
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.style.position = 'fixed';
+        input.style.left = (x - 4) + 'px';
+        input.style.top = (y - 4) + 'px';
+
+        input.onkeydown = handleEnter;
+        document.body.appendChild(input);
+        input.focus();
+        hasInput = true;
+      }
+
+      function handleEnter(e) {
+        var keyCode = e.keyCode;
+        if (keyCode === 13) {
+            ctx.clearRect(0, 0, canWidth, canHeight);
+            drawWhiteBg();
+            drawTail();
+            drawName(this.value);
+            drawSilhouette();
+            document.body.removeChild(this);
+            hasInput = false;
+        }
       }
     }
 
@@ -102,7 +157,7 @@ window.addEventListener("load", function(event) {
               if(response.success) {
                   imgUrl = response.data.link;
                   //window.location = response.data.link;
-                  console.log("Success Image has been uploaded and can be found here " + imgUrl);
+                  //console.log("Success Image has been uploaded and can be found here " + imgUrl);
                   const coverImage = imgUrl;
                   const url = 'http://www.zazzle.com/api/create/at-238092028220728468?rf=238092028220728468&ax=Linkover&pd=186437621024529370&fwd=ProductPage&ed=true&boardgraphic=' + coverImage ;
 
