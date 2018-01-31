@@ -21,18 +21,15 @@ window.addEventListener("load", function(event) {
       drawName();
       drawSilhouette();
     }
-
     //Add White Background to the graphic
     function drawWhiteBg() {
       const context = can.getContext('2d');
       context.fillStyle = "white";
       context.fillRect(0, 0, canWidth, canHeight);
     }
-
     //Drawing the red tail to the board
     function drawTail() {
       const context = can.getContext('2d');
-
       context.fillStyle = "red";
       context.fillRect(0, tailPos, canWidth, tailHeight);
     }
@@ -57,65 +54,6 @@ window.addEventListener("load", function(event) {
       let yAxis = canHeight / 8;
       const writeHeight = canHeight - tailHeight ;
       let fontSize = writeHeight / 5;
-     
-      can.onclick = function(){
-        if(hasInput) return;
-        addInput(20,20);
-
-      }
-
-      function addInput(x, y) {
-        var input = document.createElement('input');
-        input.type = 'text';
-        input.style.position = 'fixed';
-        input.style.left = (x - 4) + 'px';
-        input.style.top = (y - 4) + 'px';
-
-        input.onkeydown = handleEnter;
-        document.body.appendChild(input);
-        input.focus();
-        hasInput = true;
-      }
-
-      function handleEnter(e) {
-        var keyCode = e.keyCode;
-        if (keyCode === 13) {
-            ctx.clearRect(0, 0, canWidth, canHeight);
-            drawWhiteBg();
-            drawTail();
-            drawSilhouette();
-            drawText(this.value);
-            document.body.removeChild(this);
-            hasInput = false;
-        }
-      }
-
-      function drawText(txt) {
-        string = txt;
-        let newFormat = string.split('');
-
-        for (let o = 0; o < newFormat.length; o++) {
-          context.textBaseline = 'top';
-          context.font = "800 " + fontSize + "px Graduate" ;
-          //console.log(context.font);
-
-          context.textAlign = "center";
-          context.shadowColor="gray";
-          context.shadowBlur=2;
-          context.lineJoin = "round";
-          context.lineWidth=8;
-
-          context.strokeStyle = "white";
-          context.strokeText(newFormat[o],  xAxis, 22);
-          context.globalCompositeOperation = "destination-out";
-
-          ctx.globalCompositeOperation = "source-over";
-          context.fillStyle = "gray";
-          context.fillText(newFormat[o],  xAxis, 22);
-
-          fontSize = writeHeight / newFormat.length  ;
-        } 
-      }
 
       for (let i = 0; i < formatString.length; i++) {
         context.font = "800 " + fontSize + "px Graduate" ;
@@ -140,7 +78,6 @@ window.addEventListener("load", function(event) {
     }
 
     drawBoard();
-
 
     $("button#upload").click(function(e) {
 
