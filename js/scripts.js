@@ -176,7 +176,7 @@ window.addEventListener("load", function(event) {
         } catch(i) {
             var img = can.toDataURL().split(',')[1];
         }
-        i.preventDefault();
+       
         $.ajax({
           url: 'https://api.imgur.com/3/image',
           type: 'post',
