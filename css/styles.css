@@ -27,7 +27,8 @@
  	background: FireBrick;
  }
 
- #nameeditor{
+ #nameeditor,
+ #loading{
  	width: 100%;
  	height: 100%;
  	position: absolute;
@@ -35,6 +36,14 @@
  	left: 0px;
  	background:rgba(255,255,255,0.934);
  	z-index: 22;
+ }
+ #loading{
+ 	text-align: center;
+ 	display: none;
+ }
+ #loading img{
+ 	position: relative;
+ 	margin-top: 15%;
  }
 
 

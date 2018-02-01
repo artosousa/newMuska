@@ -130,6 +130,15 @@ window.addEventListener("load", function(event) {
         }
     }
 
+     function showLoader() {
+        var loader = document.getElementById("loading");
+        if (loader.style.display === "none") {
+            loader.style.display = "block";
+        } else {
+            loader.style.display = "none";
+        }
+    }
+
     $(document).keyup(function(e) {
          if (e.keyCode == 27) { // escape key maps to keycode `27`
             showEditor();
@@ -138,6 +147,8 @@ window.addEventListener("load", function(event) {
 
 
     $("button#upload").click(function(e) {
+        showLoader();
+      
         try {
             var img = can.toDataURL('image/jpeg', 1).split(',')[1];
 
@@ -201,6 +212,7 @@ window.addEventListener("load", function(event) {
     });
 
   }
-  imgObj.src = 'http://muska-new.surge.sh/images/silhouette.png';
+  imgObj.src = '/images/silhouette.png';
+  imgObj.crossOrigin = "Anonymous";
   $('#wrapper').width($('#canvas1').width());
 });

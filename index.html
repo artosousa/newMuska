@@ -1,4 +1,6 @@
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,19 +18,21 @@
 	<title>MUSKA GENERATOR</title>
 
 	<meta name="description" content="Ever want your very own Shorty's Muska Silhouette board? Well I can make your dreams come true.">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=1024, initial-scale=0.5">
 	<link rel="icon" href="images/favicon.png" type="image/x-icon">
   	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.css">
   	<link rel="stylesheet" type="text/css" href="css/styles.css">
+  	<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5908ae9d543d4c0012fd0604&product=inline-share-buttons' async='async'></script>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="buttonWrapper">
-			<button id="upload">BUY NOW</button>
-			<button id="download">DOWNLOAD</button>
+			<button id="upload" onclick="ga('send', 'event', { eventCategory: 'buy_now', eventAction: 'button_click', eventLabel: 'buy_click'});">BUY NOW</button>
+			<button id="download" onclick="ga('send', 'event', { eventCategory: 'download_now', eventAction: 'button_click', eventLabel: 'download'});">DOWNLOAD</button>
 
-			<p>To edit board click on the graphic and type in your name followed by the enter key.</p>
+			<p><strong><em>INSTRUCTIONS:</em></strong> To edit board click on the graphic and type in your name followed by the enter key (return / go on mobile).</p>
 			<p>Created by <a href="http://arthursousa.com" target="_blank">Arthur Sousa</a> <br/> Instagram: <a href="https://instagram.com/artosousa" target="_blank">@artosousa</a></p>
+			<div class="sharethis-inline-share-buttons"></div>
 		</div>
 		<canvas id="canvas1" width="459" height="1179"></canvas>
 	</div>
@@ -37,8 +41,25 @@
  	<div id="nameeditor" style="display: none;">
   		<div id="middle"></div>
   	</div>
+  	<div id="loading" style="display: none;">
+  		<img src="images/loading.gif" title="generating skateboard" alt="loading">
+  		<p>Your skateboard is being generated and once complete you'll be able to purchase it</p>
+  	</div>
 
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script type="text/javascript" src="js/scripts.js"></script>
+
+  	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-113362466-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-113362466-1');
+
+	  
+	</script>
+
 </body>
 </html>
