@@ -91,17 +91,35 @@ window.addEventListener("load", function(event) {
         if(hasInput) return;
         addInput(20,20);
 
+        var selectedInput = null;
+        $(function() {
+            $('input').focus(function() {
+                selectedInput = this;
+            }).blur(function(){
+                selectedInput = null;
+                ctx.clearRect(0, 0, canWidth, canHeight);
+                drawWhiteBg();
+                drawTail();
+                drawName(this.value);
+                drawSilhouette();
+                document.getElementById('middle').removeChild(this);
+                hasInput = false;
+                showEditor();
+            });
+        });
       }
 
       function addInput(x, y) {
         var input = document.createElement('input');
         input.type = 'text';
+        input.id = "editName";
         input.placeholder = "your name here";
 
         input.onkeydown = handleEnter;
         document.getElementById('middle').appendChild(input);
         input.focus();
         hasInput = true;
+
       }
 
       function handleEnter(e) {
@@ -130,20 +148,22 @@ window.addEventListener("load", function(event) {
         }
     }
 
-     function showLoader() {
-        var loader = document.getElementById("loading");
-        if (loader.style.display === "none") {
-            loader.style.display = "block";
-        } else {
-            loader.style.display = "none";
-        }
-    }
+   function showLoader() {
+      var loader = document.getElementById("loading");
+      if (loader.style.display === "none") {
+          loader.style.display = "block";
+      } else {
+          loader.style.display = "none";
+      }
+  }
 
     $(document).keyup(function(e) {
          if (e.keyCode == 27) { // escape key maps to keycode `27`
             showEditor();
         }
     });
+
+
 
 
     $("button#upload").click(function(e) {
@@ -215,4 +235,6 @@ window.addEventListener("load", function(event) {
   imgObj.src = '/images/silhouette.png';
   imgObj.crossOrigin = "Anonymous";
   $('#wrapper').width($('#canvas1').width());
+
+
 });
