@@ -3,7 +3,7 @@ window.addEventListener("load", function(event) {
   const ctx = can.getContext('2d');
   const canWidth = ctx.canvas.width = window.innerHeight /4;
   const canHeight =  ctx.canvas.height = window.innerHeight;
-  const tailHeight = canHeight / 3.5 ;
+  const tailHeight = canHeight / 2.8 ;
   const tailPos = canHeight / 1.4;
 
   let hasInput = false;
