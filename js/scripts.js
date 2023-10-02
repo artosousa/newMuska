@@ -4,7 +4,7 @@ window.addEventListener("load", function(event) {
   const canWidth = ctx.canvas.width = window.innerHeight /4;
   const canHeight =  ctx.canvas.height = window.innerHeight;
   const tailHeight = canHeight / 3.5 ;
-  const tailPos = canHeight;
+  const tailPos = canHeight / 1.4;
 
   let hasInput = false;
   let imgUrl = " ";
@@ -29,7 +29,7 @@ window.addEventListener("load", function(event) {
     //Drawing the red tail to the board
     function drawTail() {
       const context = can.getContext('2d');
-      context.fillStyle = "red";
+      context.fillStyle = "orange";
       context.fillRect(0, tailPos, canWidth, tailHeight);
     }
 
