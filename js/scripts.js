@@ -3,7 +3,7 @@ window.addEventListener("load", function(event) {
   const ctx = can.getContext('2d');
   const canWidth = ctx.canvas.width = window.innerHeight /4;
   const canHeight =  ctx.canvas.height = window.innerHeight;
-  const tailHeight = canHeight / 3 ;
+  const tailHeight = canHeight / 3.2 ;
   const tailPos = canHeight / 1.55;
 
   let hasInput = false;
@@ -36,7 +36,7 @@ window.addEventListener("load", function(event) {
     //adding silhouette PNG to the board
     function drawSilhouette(){
       const context = can.getContext('2d');
-      context.drawImage(imgObj, 0, canHeight / 2.04, canWidth,canHeight / 3   );
+      context.drawImage(imgObj, 0, canHeight , canWidth,canHeight / 3   );
 
       context.save();
       context.drawImage(imgObj, 0, canHeight / 2.04, canWidth,canHeight / 3   );
