@@ -4,7 +4,7 @@ window.addEventListener("load", function(event) {
   const canWidth = ctx.canvas.width = window.innerHeight /4;
   const canHeight =  ctx.canvas.height = window.innerHeight;
   const tailHeight = canHeight / 3 ;
-  const tailPos = canHeight / 1.2;
+  const tailPos = canHeight / 2;
 
   let hasInput = false;
   let imgUrl = " ";
